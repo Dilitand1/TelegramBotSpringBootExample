@@ -1,6 +1,7 @@
 package ru.litvinov.telegram.utils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class FileUtils {
 
@@ -44,7 +45,7 @@ public class FileUtils {
         if (findStringInFile(s, file) == null) {
             try (RandomAccessFile myFile = new RandomAccessFile(file, "rw")) {
                 myFile.seek(myFile.length());
-                myFile.writeUTF(s + "\n");
+                myFile.write(new String(s + "\n").getBytes(StandardCharsets.UTF_8));
             }
         }
     }

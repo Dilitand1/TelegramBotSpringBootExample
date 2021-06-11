@@ -19,13 +19,18 @@ public class TelegramBotService {
 
     public void addNewChatId(Long chatId) {
         try {
-            if (!chatIds.contains(String.valueOf(chatId))) {
-                chatIds.add(String.valueOf(chatId));
-                FileUtils.addStringToTheEndOfRandomFile(String.valueOf(chatId),chatIdFile);
+            String chatIdString = String.valueOf(chatId);
+            if (!chatIds.contains(chatIdString)) {
+                chatIds.add(chatIdString);
+                FileUtils.addStringToTheEndOfRandomFile(chatIdString,chatIdFile);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Set getChatIds() {
+        return new HashSet<>(chatIds);
     }
 
     @PostConstruct

@@ -28,7 +28,6 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        telegramBotService.addNewChatId(update.getMessage().getChatId());
         Message message = update.getMessage();
         try {
             if ("/start".equalsIgnoreCase(message.getText())) {
