@@ -1,32 +1,27 @@
 package ru.litvinov.telegram.service;
 
 import org.springframework.stereotype.Service;
+import ru.litvinov.telegram.utils.FileUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class TelegramBotService {
 
     File chatIdFile = null;
-    List<String> chatIds = new ArrayList<>();
+    Set<String> chatIds = new HashSet<>();
 
-    public void addNewChatId(String chatId) {
-        Path path = Paths.get(chatIdFile.getAbsolutePath());
+    public void addNewChatId(Long chatId) {
         try {
-            if (!chatIds.contains(chatId)) {
-                FileWriter writer = new FileWriter(chatIdFile);
-                for (String s : chatIds) {
-                    writer.write(chatId + "\n");
-                }
-                writer.close();
+            if (!chatIds.contains(String.valueOf(chatId))) {
+                chatIds.add(String.valueOf(chatId));
+                FileUtils.addStringToTheEndOfRandomFile(String.valueOf(chatId),chatIdFile);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -35,7 +30,7 @@ public class TelegramBotService {
 
     @PostConstruct
     public void init() throws IOException {
-        chatIdFile = new File(TelegramBotService.class.getClassLoader().getResource("chatIds.txt").getPath());
+        chatIdFile = new File(("chatIds.txt"));
         Files.lines(Paths.get(chatIdFile.getAbsolutePath())).forEach(line -> chatIds.add(line));
     }
 }

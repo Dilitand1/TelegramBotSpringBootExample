@@ -28,11 +28,12 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        Long chatId = update.getMessage().getChatId();
+        telegramBotService.addNewChatId(update.getMessage().getChatId());
         Message message = update.getMessage();
         try {
             if ("/start".equalsIgnoreCase(message.getText())) {
                 sendMsg(message, "куку");
+                telegramBotService.addNewChatId(update.getMessage().getChatId());
             } else {
                 sendMsg(message,"unrecognized command");
             }
