@@ -28,11 +28,16 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        //Из чата бота
         Message message = update.getMessage();
+        //Если бот добавлен в другой чат как админ, то используем getChannelPost
+        if (message == null) {
+            message = update.getChannelPost();
+        }
         try {
             if ("/start".equalsIgnoreCase(message.getText())) {
+                telegramBotService.addNewChatId(message.getChatId());
                 sendMsg(message, "куку");
-                telegramBotService.addNewChatId(update.getMessage().getChatId());
             } else {
                 sendMsg(message,"unrecognized command");
             }
@@ -51,6 +56,7 @@ public class Bot extends TelegramLongPollingBot {
         execute(sendMessage);
     }
 
+    //Пример реализации кнопок
     public void setButtons(SendMessage sendMessage, Message message, String[] questions) {
         ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
